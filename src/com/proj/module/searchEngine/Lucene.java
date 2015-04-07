@@ -25,9 +25,9 @@ public class Lucene {
 		private static String keyword = null;
 
 		public static void main(String[] args) throws Exception{
-			if (Integer.parseInt(args[0]) == 1){
+			if (args[0].equals("patch")){
 				  String driver = "com.mysql.jdbc.Driver";
-				  String url = "jdbc:mysql://172.16.153.24:49165/contribute_crawler";
+				  String url = "jdbc:mysql://db:49165/contribute_crawler";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  directory = FSDirectory.open(new File(INDEX_DIR));
@@ -70,9 +70,9 @@ public class Lucene {
 					  e.printStackTrace();
 		           	}
 			}
-			else if (Integer.parseInt(args[0]) == 2){
+			else if (args[0].equals("search")){
 				  String driver = "com.mysql.jdbc.Driver";
-				  String url = "jdbc:mysql://172.16.153.24:49165/company_service";
+				  String url = "jdbc:mysql://db:49165/company_service";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  String result = null;
