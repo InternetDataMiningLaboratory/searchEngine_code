@@ -27,7 +27,7 @@ public class Lucene {
 		public static void main(String[] args) throws Exception{
 			if (args[0].equals("patch")){
 				  String driver = "com.mysql.jdbc.Driver";
-				  String url = "jdbc:mysql://db:49165/contribute_crawler";
+				  String url = "jdbc:mysql://db:3306/contribute_crawler";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  directory = FSDirectory.open(new File(INDEX_DIR));
@@ -72,7 +72,7 @@ public class Lucene {
 			}
 			else if (args[0].equals("search")){
 				  String driver = "com.mysql.jdbc.Driver";
-				  String url = "jdbc:mysql://db:49165/company_service";
+				  String url = "jdbc:mysql://db:3306/company_service";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  String result = null;
