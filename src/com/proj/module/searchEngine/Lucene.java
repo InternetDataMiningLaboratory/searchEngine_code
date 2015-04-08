@@ -76,7 +76,7 @@ public class Lucene {
 			}
 			else if (args[0].equals("search")){
 				  String driver = "com.mysql.jdbc.Driver";
-				  String url = "jdbc:mysql://db:49165/company_service";
+				  String url = "jdbc:mysql://db:3306/company_service";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  String result = "";
