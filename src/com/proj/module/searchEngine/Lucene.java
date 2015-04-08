@@ -76,10 +76,10 @@ public class Lucene {
 			}
 			else if (args[0].equals("search")){
 				  String driver = "com.mysql.jdbc.Driver";
-				  String url = "jdbc:mysql://db:3306/company_service";
+				  String url = "jdbc:mysql://db:49165/company_service";
 				  String user = "admin"; 
 				  String password = "nlp506";
-				  String result = null;
+				  String result = "";
 				  ConfigProperties config =LuceneConfig.config;
 				  INDEX_DIR = config.getValue("lucene.indexFilePath");
 				  
@@ -94,15 +94,20 @@ public class Lucene {
 					  ResultSet rs1 = pst1.executeQuery();
 					  rs1.next();
 					  keyword = rs1.getString("search_word");
+					  String[] keywords = keyword.split("　");
 					  analyzer = new IKAnalyzer();
 					  DefaultLuceneSearcher search = new DefaultLuceneSearcher(analyzer, parser);
-					  TopDocs results = search.search(keyword, 1);
-					  result = search.printResult(results);
-					  result = result.substring(0,result.length()-1);
+					  for (int i = 0; i < keywords.length; i++){
+						  TopDocs results = search.search(keywords[i], 1);
+						  String res = search.printResult(results);
+						  result = result+res;
+					  }
+					  result = result.substring(0, result.length()-1);
 					  System.out.println(result);
-					  String sql2 = "update search set search_result = ?";
+					  String sql2 = "update search set search_result = ? where search_id = ?";
 					  PreparedStatement pst = conn.prepareStatement(sql2);
 					  pst.setString(1,result);
+					  pst.setString(2,args[1]);
 					  pst.executeUpdate();
 				  }catch(Exception e) {
 					  e.printStackTrace();

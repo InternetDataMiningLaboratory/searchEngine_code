@@ -31,7 +31,7 @@ public class DefaultLuceneSearcher implements ISearcher {
 	//private String field = "contents";
 	//Ĭ������������÷ֵ��ֶ�(һ��Ϊÿ���ĵ��ı���������ֶ�"contents","title")
 	private String[] defaultFields = {"contents","title"};
-	int defaultPageSize=50;
+	int defaultPageSize=10000;
 	public static String INDEX_STORE_PATH = null; 
 	private static Directory directory = null;
 
@@ -208,7 +208,7 @@ public class DefaultLuceneSearcher implements ISearcher {
 	public String printResult(TopDocs results) {
 		ScoreDoc[] h = results.scoreDocs;
 		String[] result = {};
-		result = new String[50];
+		result = new String[10001];
 		if (h.length == 0) {
 			System.out.println("NO RESULT!");
 			return null;
@@ -216,20 +216,22 @@ public class DefaultLuceneSearcher implements ISearcher {
 			for (int i = 0; i < h.length; i++) {
 				try {
 					Document doc = searcher.doc(h[i].doc);
-					System.out.println(doc.get("title"));
+					//System.out.println(doc.get("title"));
 					result[i] = doc.get("title");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		System.out.println("--------------------------");
+		//System.out.println("--------------------------");
 		StringBuffer sb = new StringBuffer();
 		for(int i = 0; i < result.length; i++){
 			if (result[i] != null)
 			sb. append(result[i]+",");
 		}
 		String rs = sb.toString();
+		rs = rs.substring(0, rs.length()-1);
+		rs = rs.concat(";");
 		return rs;
 	}
 
