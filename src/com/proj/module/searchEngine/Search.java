@@ -18,7 +18,7 @@ public class Search {
 	
 	public static void main(String[] args) throws Exception{
 		  String driver = "com.mysql.jdbc.Driver";
-		  String url = "jdbc:mysql://192.168.1.110:49154/company_service";
+		  String url = "jdbc:mysql://db:3306/company_service";
 		  String user = "admin"; 
 		  String password = "nlp506";
 		  String result = null;

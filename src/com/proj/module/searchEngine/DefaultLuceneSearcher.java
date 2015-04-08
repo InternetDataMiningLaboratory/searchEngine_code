@@ -20,6 +20,8 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import com.proj.utils.ConfigProperties;
+
 public class DefaultLuceneSearcher implements ISearcher {
 	
 	private IndexSearcher searcher = null;
@@ -30,11 +32,9 @@ public class DefaultLuceneSearcher implements ISearcher {
 	//Ĭ������������÷ֵ��ֶ�(һ��Ϊÿ���ĵ��ı���������ֶ�"contents","title")
 	private String[] defaultFields = {"contents","title"};
 	int defaultPageSize=50;
-	public final static String INDEX_STORE_PATH = "/home/b50601/LuceneIndex"; 
+	public static String INDEX_STORE_PATH = null; 
 	private static Directory directory = null;
 
-	
-	//ConfigProperties config = LuceneConfig.config;
 	QueryParser defaultParser;
 
 	/**����Ϊһ����ʱ����ÿ��һ��ʱ�����´�lucene�����࣬����ʵʱ����
@@ -58,6 +58,8 @@ public class DefaultLuceneSearcher implements ISearcher {
 						try {
 							//reader = DirectoryReader.open(LuceneContext
 							//		.getContextInstance().getIndexDir());
+							ConfigProperties config =LuceneConfig.config;
+							INDEX_STORE_PATH = config.getValue("lucene.indexFilePath");
 							directory = FSDirectory.open(new File(INDEX_STORE_PATH));
 							@SuppressWarnings("deprecation")
 							IndexReader reader_ = IndexReader.open(directory);
@@ -89,6 +91,8 @@ public class DefaultLuceneSearcher implements ISearcher {
 		try {
 			//IndexReader reader = DirectoryReader.open(LuceneContext
 			//		.getContextInstance().getIndexDir());
+			ConfigProperties config =LuceneConfig.config;
+			INDEX_STORE_PATH = config.getValue("lucene.indexFilePath");
 			directory = FSDirectory.open(new File(INDEX_STORE_PATH));
 			@SuppressWarnings("deprecation")
 			IndexReader reader = IndexReader.open(directory);

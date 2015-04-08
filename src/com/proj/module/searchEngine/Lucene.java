@@ -16,9 +16,11 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.wltea.analyzer.lucene.IKAnalyzer;
+import com.proj.utils.ConfigProperties;
 
 public class Lucene {
-	  	private static String INDEX_DIR = "/home/b50601/LuceneIndex";
+	  	//private static String INDEX_DIR = "/home/b50601/LuceneIndex";
+		private static String INDEX_DIR = null;
 	  	private static Directory directory = null;
 	  	private static Analyzer analyzer = null;
 		private static QueryParser parser = null;
@@ -30,6 +32,8 @@ public class Lucene {
 				  String url = "jdbc:mysql://db:3306/contribute_crawler";
 				  String user = "admin"; 
 				  String password = "nlp506";
+				  ConfigProperties config =LuceneConfig.config;
+				  INDEX_DIR = config.getValue("lucene.indexFilePath");
 				  directory = FSDirectory.open(new File(INDEX_DIR));
 				  analyzer = new IKAnalyzer();
 				  DefaultLuceneIndex test =new DefaultLuceneIndex(directory, analyzer);
@@ -76,6 +80,9 @@ public class Lucene {
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  String result = null;
+				  ConfigProperties config =LuceneConfig.config;
+				  INDEX_DIR = config.getValue("lucene.indexFilePath");
+				  
 				  try{
 					  Class.forName(driver);
 					  Connection conn = DriverManager.getConnection(url, user, password);
