@@ -132,7 +132,7 @@ public class DefaultLuceneSearcher implements ISearcher {
 			//
 			synchronized (defaultParser) {
 				query = defaultParser.parse(keyword);
-				//defaultParser.setDefaultOperator(QueryParser.Opertator.AND);
+				defaultParser.setDefaultOperator(QueryParser.Operator.AND);
 			}
 			int start = (page - 1) * pageSize;
 			int hm = start + pageSize;
