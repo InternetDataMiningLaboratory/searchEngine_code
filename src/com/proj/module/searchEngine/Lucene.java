@@ -29,7 +29,7 @@ public class Lucene {
 		public static void main(String[] args) throws Exception{
 			if (args[0].equals("patch")){
 				  String driver = "com.mysql.jdbc.Driver";
-				  String url = "jdbc:mysql://db/contribute_crawler";
+				  String url = "jdbc:mysql://mysql.service.consul/contribute_crawler";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  ConfigProperties config =LuceneConfig.config;
@@ -76,7 +76,7 @@ public class Lucene {
 			}
 			else if (args[0].equals("search")){
 				  String driver = "com.mysql.jdbc.Driver";
-				  String url = "jdbc:mysql://db/company_service";
+				  String url = "jdbc:mysql://mysql.service.consul/company_service";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  String result = "";
@@ -98,6 +98,7 @@ public class Lucene {
 					  analyzer = new IKAnalyzer(true);
 					  DefaultLuceneSearcher search = new DefaultLuceneSearcher(analyzer, parser);
 					  for (int i = 0; i < keywords.length; i++){
+						  System.out.println(keywords[i]);
 						  TopDocs results = search.search(keywords[i], 1);
 						  String res = search.printResult(results);
 						  result = result+res;

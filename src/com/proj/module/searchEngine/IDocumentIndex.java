@@ -2,7 +2,7 @@ package com.proj.module.searchEngine;
 
 import java.util.HashMap;
 
-import com.proj.annotation.IndexField;
+//import com.proj.annotation.IndexField;
 
 public interface IDocumentIndex {
 	

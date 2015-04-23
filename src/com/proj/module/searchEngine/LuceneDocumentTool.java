@@ -9,7 +9,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 
-import com.proj.annotation.IndexField;
+//import com.proj.annotation.IndexField;
 
 public class LuceneDocumentTool {
 	// 将要建立索引的文件构造成一个Document对象，并添加一个域"content"
@@ -23,7 +23,7 @@ public class LuceneDocumentTool {
 		}
 		return doc;
 	}
-	public Document getDocument(HashMap<String, String> sourceDocument,IndexField config) throws Exception {
+/*	public Document getDocument(HashMap<String, String> sourceDocument,IndexField config) throws Exception {
 		Document doc = new Document();
 		for(Entry e:sourceDocument.entrySet()){
 			Field field=getField((String)e.getKey(),(String)e.getValue(),config);
@@ -32,7 +32,7 @@ public class LuceneDocumentTool {
 		doc.add(field);
 		}
 		return doc;
-	}
+	}*/
 	
 	public Document getDocument(List<Field> fields) throws Exception {
 		Document doc = new Document();
@@ -54,12 +54,12 @@ public class LuceneDocumentTool {
 		Field field = new Field(fieldName, text, defaultFieldType);
 		return field;
 	}
-	public Field getField(String fieldName,String text,IndexField config){
+	/*public Field getField(String fieldName,String text,IndexField config){
 		
 		FieldType fieldType=getFieldType(config);
 		Field field = new Field(fieldName, text, fieldType);
 		return field;
-	}
+	}*/
 	/**根据指定的配置生成对应的field域
 	 * @param config  用bit位代表对应的配置信息true or false 共6位
 	 * @return
@@ -81,7 +81,7 @@ public class LuceneDocumentTool {
 	}
 	
 	
-	public FieldType getFieldType(IndexField config){
+	/*public FieldType getFieldType(IndexField config){
 		
 		FieldType fieldType = new FieldType();
 		
@@ -95,7 +95,7 @@ public class LuceneDocumentTool {
 		
 		
 		
-	}
+	}*/
 	
 	
 }
