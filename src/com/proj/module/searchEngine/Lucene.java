@@ -73,7 +73,7 @@ public class Lucene {
 					  }
 					  String sql3 = "update patch set patch_status = ? where patch_id = ?";
 					  PreparedStatement pst1 = conn.prepareStatement(sql3);
-					  pst1.setString(1,"success");
+					  pst1.setString(1,"Success");
 					  pst1.setString(2,args[1]);
 					  pst1.executeUpdate();
 					  rs1.close();
@@ -83,7 +83,7 @@ public class Lucene {
 					  Connection conn = DriverManager.getConnection(url, user, password);
 					  String sql3 = "update patch set patch_status = ? where patch_id = ?";
 					  PreparedStatement pst1 = conn.prepareStatement(sql3);
-					  pst1.setString(1,"error:"+err);
+					  pst1.setString(1,"Error:"+err);
 					  pst1.setString(2,args[1]);
 					  pst1.executeUpdate();
 		           	}
@@ -128,7 +128,7 @@ public class Lucene {
 					  pst.executeUpdate();
 					  String sql3 = "update search set search_status = ? where search_id = ?";
 					  PreparedStatement pst2 = conn.prepareStatement(sql3);
-					  pst2.setString(1,"success");
+					  pst2.setString(1,"Success");
 					  pst2.setString(2,args[1]);
 					  pst2.executeUpdate();
 				  }catch(Exception e) {
@@ -136,7 +136,7 @@ public class Lucene {
 					  Connection conn = DriverManager.getConnection(url, user, password);
 					  String sql3 = "update search set search_status = ? where search_id = ?";
 					  PreparedStatement pst2 = conn.prepareStatement(sql3);
-					  pst2.setString(1,"error:"+err);
+					  pst2.setString(1,"Error:"+err);
 					  pst2.setString(2,args[1]);
 					  pst2.executeUpdate();
 				  }
