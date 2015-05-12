@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.TopDocs;
@@ -17,6 +16,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 import com.proj.utils.ConfigProperties;
+import org.json.JSONArray;
 
 public class Lucene {
 	  	//private static String INDEX_DIR = "/home/b50601/LuceneIndex";
@@ -30,6 +30,7 @@ public class Lucene {
 			if (args[0].equals("patch")){
 				  String driver = "com.mysql.jdbc.Driver";
 				  String url = "jdbc:mysql://mysql.service.consul/contribute_crawler";
+				 // String url = "jdbc:mysql://172.16.153.34/contribute_crawler";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  ConfigProperties config =LuceneConfig.config;
@@ -43,17 +44,20 @@ public class Lucene {
 					  if(!conn.isClosed()) 
 						  System.out.println("Succeeded connecting to the Database!");
 					  Statement statement = conn.createStatement();
-					  String sql1 = "select * from patch where patch_id = ?"; //2
+					  String sql1 = "select * from patch where patch_id = ?"; 
 					  PreparedStatement pst = conn.prepareStatement(sql1);
 					  pst.setString(1,args[1]);
 					  ResultSet rs1 = pst.executeQuery();
 					  rs1.next();
-					  String data_set = rs1.getString("data_set");
-					  String[] data_set_string = data_set.split(",");
-					  for(int i = 1; i < data_set_string.length; i++){
-						  int number = Integer.parseInt(data_set_string[i-1]);
-						  String sql2 = "select * from data where data_id = "+number;
-						  ResultSet rs2 = statement.executeQuery(sql2);
+					  String patch_set = rs1.getString("patch_set");
+					  JSONArray jsonArray = new JSONArray(patch_set);
+					  for(int i = 0; i < jsonArray.length(); i++){
+						  String set = jsonArray.getString(i);
+						  System.out.println(set);
+						  String sql2 = "select * from data where data_validate = ?";
+						  PreparedStatement pst2 = conn.prepareStatement(sql2);
+						  pst2.setString(1,set);
+						  ResultSet rs2 = pst2.executeQuery();
 						  rs2.next();
 						  String data_id = rs2.getString("data_id");
 						  String data_content = rs2.getString("data_content");
@@ -63,11 +67,15 @@ public class Lucene {
 						  HashMap<String, String> map = new HashMap<String, String>();
 						  map.put("contents",data_content);
 						  map.put("title", data_id);
-						  System.out.println(data_id);
 						  test.addDocumentIndex(map);
 						  data_content = "";
 						  rs2.close();
 					  }
+					  String sql3 = "update patch set patch_status = ? where patch_id = ?";
+					  PreparedStatement pst1 = conn.prepareStatement(sql3);
+					  pst1.setString(1,"success");
+					  pst1.setString(2,args[1]);
+					  pst1.executeUpdate();
 					  rs1.close();
 					  conn.close();
 				  } catch(Exception e) {
@@ -77,6 +85,7 @@ public class Lucene {
 			else if (args[0].equals("search")){
 				  String driver = "com.mysql.jdbc.Driver";
 				  String url = "jdbc:mysql://mysql.service.consul/company_service";
+				  //String url = "jdbc:mysql://172.16.153.34/company_service";
 				  String user = "admin"; 
 				  String password = "nlp506";
 				  String result = "";
@@ -93,23 +102,29 @@ public class Lucene {
 					  pst1.setString(1,args[1]);
 					  ResultSet rs1 = pst1.executeQuery();
 					  rs1.next();
-					  keyword = rs1.getString("search_word");
-					  String[] keywords = keyword.split(" |　");
+					  String keyword = rs1.getString("search_word");
+					  JSONArray jsonArray = new JSONArray(keyword);
 					  analyzer = new IKAnalyzer(true);
 					  DefaultLuceneSearcher search = new DefaultLuceneSearcher(analyzer, parser);
-					  for (int i = 0; i < keywords.length; i++){
-						  System.out.println(keywords[i]);
-						  TopDocs results = search.search(keywords[i], 1);
+					  for (int i = 0; i < jsonArray.length(); i++){
+						  System.out.println(jsonArray.getString(i));
+						  TopDocs results = search.search(jsonArray.getString(i), 1);
 						  String res = search.printResult(results);
 						  result = result+res;
 					  }
 					  result = result.substring(0, result.length()-1);
+					  result = "["+result+"]";
 					  System.out.println(result);
 					  String sql2 = "update search set search_result = ? where search_id = ?";
 					  PreparedStatement pst = conn.prepareStatement(sql2);
 					  pst.setString(1,result);
 					  pst.setString(2,args[1]);
 					  pst.executeUpdate();
+					  String sql3 = "update search set search_status = ? where search_id = ?";
+					  PreparedStatement pst2 = conn.prepareStatement(sql3);
+					  pst2.setString(1,"success");
+					  pst2.setString(2,args[1]);
+					  pst2.executeUpdate();
 				  }catch(Exception e) {
 					  e.printStackTrace();
 				  }

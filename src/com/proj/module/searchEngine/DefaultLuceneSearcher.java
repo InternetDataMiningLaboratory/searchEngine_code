@@ -231,7 +231,9 @@ public class DefaultLuceneSearcher implements ISearcher {
 		}
 		String rs = sb.toString();
 		rs = rs.substring(0, rs.length()-1);
-		rs = rs.concat(";");
+		rs = "["+rs;
+		rs = rs.concat("]");
+		rs = rs.concat(",");
 		return rs;
 	}
 

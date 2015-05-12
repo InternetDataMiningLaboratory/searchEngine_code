@@ -21,7 +21,7 @@ public class Keyword {
 	
 	public static void main(String[] args) throws Exception{
 		String driver = "com.mysql.jdbc.Driver";
-		String url = "jdbc:mysql://localhost/company_service";
+		String url = "jdbc:mysql://172.16.153.34/company_service";
 		String user = "admin"; 
 		String password = "nlp506";
 		String keyword = null;
