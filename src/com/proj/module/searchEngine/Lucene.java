@@ -79,7 +79,13 @@ public class Lucene {
 					  rs1.close();
 					  conn.close();
 				  } catch(Exception e) {
-					  e.printStackTrace();
+					  String err = e.getMessage();
+					  Connection conn = DriverManager.getConnection(url, user, password);
+					  String sql3 = "update patch set patch_status = ? where patch_id = ?";
+					  PreparedStatement pst1 = conn.prepareStatement(sql3);
+					  pst1.setString(1,"error:"+err);
+					  pst1.setString(2,args[1]);
+					  pst1.executeUpdate();
 		           	}
 			}
 			else if (args[0].equals("search")){
@@ -126,7 +132,13 @@ public class Lucene {
 					  pst2.setString(2,args[1]);
 					  pst2.executeUpdate();
 				  }catch(Exception e) {
-					  e.printStackTrace();
+					  String err = e.getMessage();
+					  Connection conn = DriverManager.getConnection(url, user, password);
+					  String sql3 = "update search set search_status = ? where search_id = ?";
+					  PreparedStatement pst2 = conn.prepareStatement(sql3);
+					  pst2.setString(1,"error:"+err);
+					  pst2.setString(2,args[1]);
+					  pst2.executeUpdate();
 				  }
 			}
 			else
