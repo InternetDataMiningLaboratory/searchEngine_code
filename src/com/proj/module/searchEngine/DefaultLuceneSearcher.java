@@ -211,7 +211,7 @@ public class DefaultLuceneSearcher implements ISearcher {
 		result = new String[10001];
 		if (h.length == 0) {
 			System.out.println("NO RESULT!");
-			return null;
+			return "[],";
 		} else {
 			for (int i = 0; i < h.length; i++) {
 				try {

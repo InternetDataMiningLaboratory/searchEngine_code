@@ -116,10 +116,10 @@ public class Lucene {
 						  System.out.println(jsonArray.getString(i));
 						  TopDocs results = search.search(jsonArray.getString(i), 1);
 						  String res = search.printResult(results);
-						  result = result+res;
+						  result = result+"\""+jsonArray.getString(i)+"\":"+res;
 					  }
 					  result = result.substring(0, result.length()-1);
-					  result = "["+result+"]";
+					  result = "{"+result+"}";
 					  System.out.println(result);
 					  String sql2 = "update search set search_result = ? where search_id = ?";
 					  PreparedStatement pst = conn.prepareStatement(sql2);
