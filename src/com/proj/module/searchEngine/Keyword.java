@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import net.sf.json.util.JSONUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -93,18 +94,18 @@ public class Keyword {
 	            	}
 	            }
 	        }
-			String sql = "delete from model_data where model_id = 2";
-			PreparedStatement pst = conn.prepareStatement(sql);
-			pst.executeUpdate();
+			String score = "";
+		//	JSONObject jsonObject1 = JSONObject.fromObject(map);  
             for(Map.Entry<Integer,Float> entry:map.entrySet()){
-                System.out.println(entry.getKey()+"--->"+entry.getValue());
-                String sql5 = "insert into model_data (model_id,data_id,data_score) values (2,?,?)";
-                PreparedStatement pst5 = conn.prepareStatement(sql5);
-                pst5.setInt(1,entry.getKey());
-                pst5.setFloat(2,entry.getValue());
-                pst5.executeUpdate();
+                score = score+entry.getKey()+":"+entry.getValue()+",";
                 }
-
+            score = "{"+score.substring(0, score.length()-1)+"}";
+            System.out.println(score);
+            String sql5 = "update user set user_score = ? where user_id = ?";
+            PreparedStatement pst5 = conn.prepareStatement(sql5);
+            pst5.setString(1, score);
+            pst5.setString(2, args[0]);
+            pst5.executeUpdate();
 
 		}catch(Exception e) {
 			e.printStackTrace();
