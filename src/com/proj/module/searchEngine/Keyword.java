@@ -10,11 +10,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import net.sf.json.util.JSONUtils;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,7 +26,7 @@ public class Keyword {
 		String user = "admin"; 
 		String password = "nlp506";
 		String keyword = null;
-		String search_word = "";
+		ArrayList<String>  search_word = new ArrayList<String> ();
 		String search_result = "";
         String key = null;
         String value = null;
@@ -49,15 +48,14 @@ public class Keyword {
 			else{
 				while(rs.next()){
 					keyword = rs.getString("keyword");
-					System.out.println(keyword);
-					search_word = search_word+"\""+keyword+"\",";
+					search_word.add(keyword);
 				}
-				search_word = "["+search_word.substring(0, search_word.length()-1)+"]";
-				System.out.println(search_word);
+				JSONArray words = new JSONArray(search_word);
+				System.out.println(words);
 			}
 			String sql2 = "insert into search (search_id,search_word,search_result,search_status) values (NULL,?,NULL,NULL)";
 			PreparedStatement pst2 = conn.prepareStatement(sql2);
-			pst2.setString(1,search_word);
+			pst2.setString(1,search_word.toString());
 			pst2.executeUpdate();
 			String sql3 = " SELECT LAST_INSERT_ID();";
 			PreparedStatement pst3 = conn.prepareStatement(sql3);
@@ -73,6 +71,7 @@ public class Keyword {
 			String sql4 = "select * from search where search_id = ?";
 			PreparedStatement pst4 = conn.prepareStatement(sql4);
 			pst4.setLong(1,search_id);
+			//pst4.setLong(1,14);
 			ResultSet rs2 = pst4.executeQuery();
 			rs2.next();
 			search_result = rs2.getString("search_result");
@@ -94,16 +93,11 @@ public class Keyword {
 	            	}
 	            }
 	        }
-			String score = "";
-		//	JSONObject jsonObject1 = JSONObject.fromObject(map);  
-            for(Map.Entry<Integer,Float> entry:map.entrySet()){
-                score = score+entry.getKey()+":"+entry.getValue()+",";
-                }
-            score = "{"+score.substring(0, score.length()-1)+"}";
-            System.out.println(score);
+			JSONObject result = new JSONObject(map);
+			System.out.println(result);
             String sql5 = "update user set user_score = ? where user_id = ?";
             PreparedStatement pst5 = conn.prepareStatement(sql5);
-            pst5.setString(1, score);
+            pst5.setString(1, result.toString());
             pst5.setString(2, args[0]);
             pst5.executeUpdate();
 

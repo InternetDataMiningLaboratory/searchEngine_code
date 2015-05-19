@@ -35,7 +35,7 @@ public class Search {
 			  analyzer = new IKAnalyzer();
 			  DefaultLuceneSearcher search = new DefaultLuceneSearcher(analyzer, parser);
 			  TopDocs results = search.search(keyword, 1);
-			  result = search.printResult(results);
+			//  result = search.printResult(results);
 			  result = result.substring(0,result.length()-1);
 			  System.out.println(result);
 			  String sql2 = "update search set search_result = ?";

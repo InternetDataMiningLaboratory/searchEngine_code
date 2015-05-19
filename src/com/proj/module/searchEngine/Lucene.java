@@ -6,7 +6,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.lucene.analysis.Analyzer;
@@ -17,6 +19,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 import com.proj.utils.ConfigProperties;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Lucene {
 	  	//private static String INDEX_DIR = "/home/b50601/LuceneIndex";
@@ -94,7 +97,7 @@ public class Lucene {
 				  //String url = "jdbc:mysql://172.16.153.34/company_service";
 				  String user = "admin"; 
 				  String password = "nlp506";
-				  String result = "";
+				  ArrayList<String>  result_of_search = new ArrayList<String> ();
 				  ConfigProperties config =LuceneConfig.config;
 				  INDEX_DIR = config.getValue("lucene.indexFilePath");
 				  
@@ -112,18 +115,18 @@ public class Lucene {
 					  JSONArray jsonArray = new JSONArray(keyword);
 					  analyzer = new IKAnalyzer(true);
 					  DefaultLuceneSearcher search = new DefaultLuceneSearcher(analyzer, parser);
+					  Map map = new HashMap();
 					  for (int i = 0; i < jsonArray.length(); i++){
 						  System.out.println(jsonArray.getString(i));
 						  TopDocs results = search.search(jsonArray.getString(i), 1);
-						  String res = search.printResult(results);
-						  result = result+"\""+jsonArray.getString(i)+"\":"+res;
+						  result_of_search = search.printResult(results);
+						  map.put(jsonArray.getString(i), result_of_search);
 					  }
-					  result = result.substring(0, result.length()-1);
-					  result = "{"+result+"}";
-					  System.out.println(result);
+					  JSONObject jsonresult = new JSONObject(map);
+					  System.out.println(jsonresult);
 					  String sql2 = "update search set search_result = ? where search_id = ?";
 					  PreparedStatement pst = conn.prepareStatement(sql2);
-					  pst.setString(1,result);
+					  pst.setObject(1,jsonresult.toString());
 					  pst.setString(2,args[1]);
 					  pst.executeUpdate();
 					  String sql3 = "update search set search_status = ? where search_id = ?";

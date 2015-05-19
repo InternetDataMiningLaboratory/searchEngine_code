@@ -205,13 +205,14 @@ public class DefaultLuceneSearcher implements ISearcher {
 		return null;
 	}
 
-	public String printResult(TopDocs results) {
+	public ArrayList<String> printResult(TopDocs results) {
 		ScoreDoc[] h = results.scoreDocs;
 		String[] result = {};
+		ArrayList<String>  result_of_search = new ArrayList<String> ();
 		result = new String[10001];
 		if (h.length == 0) {
 			System.out.println("NO RESULT!");
-			return "[],";
+			return result_of_search;
 		} else {
 			for (int i = 0; i < h.length; i++) {
 				try {
@@ -224,17 +225,11 @@ public class DefaultLuceneSearcher implements ISearcher {
 			}
 		}
 		//System.out.println("--------------------------");
-		StringBuffer sb = new StringBuffer();
 		for(int i = 0; i < result.length; i++){
 			if (result[i] != null)
-			sb. append(result[i]+",");
+				result_of_search.add(result[i]);			
 		}
-		String rs = sb.toString();
-		rs = rs.substring(0, rs.length()-1);
-		rs = "["+rs;
-		rs = rs.concat("]");
-		rs = rs.concat(",");
-		return rs;
+		return result_of_search;
 	}
 
 	/**���������ת��Ϊhashmap����
