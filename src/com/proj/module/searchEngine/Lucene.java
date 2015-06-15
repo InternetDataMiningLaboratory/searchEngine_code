@@ -22,7 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Lucene {
-	  	//private static String INDEX_DIR = "/home/b50601/LuceneIndex";
 		private static String INDEX_DIR = null;
 	  	private static Directory directory = null;
 	  	private static Analyzer analyzer = null;
@@ -33,9 +32,8 @@ public class Lucene {
 			if (args[0].equals("patch")){
 				  String driver = "com.mysql.jdbc.Driver";
 				  String url = "jdbc:mysql://mysql.service.consul/contribute_crawler";
-				 // String url = "jdbc:mysql://172.16.153.34/contribute_crawler";
-				  String user = "admin"; 
-				  String password = "nlp506";
+				  String user = System.getenv("DATABASE_USER"); 
+				  String password = System.getenv("DATABASE_PASSWD");
 				  ConfigProperties config =LuceneConfig.config;
 				  INDEX_DIR = config.getValue("lucene.indexFilePath");
 				  directory = FSDirectory.open(new File(INDEX_DIR));
@@ -94,9 +92,8 @@ public class Lucene {
 			else if (args[0].equals("search")){
 				  String driver = "com.mysql.jdbc.Driver";
 				  String url = "jdbc:mysql://mysql.service.consul/company_service";
-				  //String url = "jdbc:mysql://172.16.153.34/company_service";
-				  String user = "admin"; 
-				  String password = "nlp506";
+				  String user = System.getenv("DATABASE_USER"); 
+				  String password = System.getenv("DATABASE_PASSWD");
 				  ArrayList<String>  result_of_search = new ArrayList<String> ();
 				  ConfigProperties config =LuceneConfig.config;
 				  INDEX_DIR = config.getValue("lucene.indexFilePath");
